@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Summary</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .summary-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .summary-card {
+            width: 45%;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 250px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            margin-top: 0;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            margin-bottom: 8px;
+        }
+
+        .yearly-summary-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .yearly-summary-card {
+            width: 30%;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">Print</button>
+    <h1>Summary</h1>
+
+    <h2>Yearly Summary</h2>
+    <div class="yearly-summary-container">
+        {% for year, summary in yearly_summary.items %}
+            <div class="yearly-summary-card">
+                <h2>{{ year }}</h2>
+                <div class="chart-container">
+                    <canvas id="chart-year-{{ year }}"></canvas>
+                </div>
+                <p><strong>Total Income:</strong> {{ summary.total_income }}</p>
+                <p><strong>Total Expenses:</strong> {{ summary.total_expenses }}</p>
+                <p><strong>Total Savings:</strong> {{ summary.total_savings }}</p>
+            </div>
+
+            <script>
+                var chartDataYear{{ year }} = {
+                    labels: ['Income', 'Expenses', 'Savings'],
+                    datasets: [{
+                        data: [
+                            {{ summary.total_income }},
+                            {{ summary.total_expenses }},
+                            {{ summary.total_savings }}
+                        ],
+                        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56']
+                    }]
+                };
+
+                var ctxYear{{ year }} = document.getElementById('chart-year-{{ year }}').getContext('2d');
+                var myChartYear{{ year }} = new Chart(ctxYear{{ year }}, {
+                    type: 'pie',
+                    data: chartDataYear{{ year }},
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            </script>
+        {% endfor %}
+    </div>
+
+    <h2>Monthly Summary</h2>
+    <div class="summary-container">
+        {% for monthly_detail in monthly_details %}
+            <div class="summary-card">
+                <h2>{{ monthly_detail.month }}/{{ monthly_detail.year }}</h2>
+                <div class="chart-container">
+                    <canvas id="chart-{{ forloop.counter }}"></canvas>
+                </div>
+                <p><strong>Total Income:</strong> {{ monthly_detail.total_income }}</p>
+                <p><strong>Total Expenses:</strong> {{ monthly_detail.total_expenses }}</p>
+                <p><strong>Total Savings:</strong> {{ monthly_detail.total_savings }}</p>
+                <p><strong>Cash Balance:</strong> {{ monthly_detail.cash_balance }}</p>
+            </div>
+
+            <script>
+                var chartData{{ forloop.counter }} = {
+                    labels: ['Income', 'Expenses', 'Savings'],
+                    datasets: [{
+                        data: [
+                            {{ monthly_detail.total_income }},
+                            {{ monthly_detail.total_expenses }},
+                            {{ monthly_detail.total_savings }}
+                        ],
+                        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56']
+                    }]
+                };
+
+                var ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+                var myChart{{ forloop.counter }} = new Chart(ctx{{ forloop.counter }}, {
+                    type: 'pie',
+                    data: chartData{{ forloop.counter }},
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            </script>
+        {% endfor %}
+    </div>
+</body>
+</html>

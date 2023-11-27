@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Limits</title>
+  
+  <style>
+    /* CSS styles for layout */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    h2 {
+      color: #666;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    
+    h3 {
+      color: #999;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    
+    p {
+      color: #333;
+      font-size: 16px;
+      margin: 0 0 10px 0;
+    }
+    
+    .section {
+      margin-bottom: 20px;
+    }
+    
+    .section-heading {
+      background-color: #f2f2f2;
+      padding: 10px;
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .chart-container {
+      width: 500px;
+      height: 300px;
+      margin-top: 20px;
+    }
+
+    .exceeded-limit {
+      color: red;
+      font-weight: bold;
+    }
+
+    .within-limit {
+      color: green;
+    }
+        
+    .print-button {
+      margin-bottom: 10px;
+    }
+    
+    .download-link {
+      display: block;
+      margin-top: 10px;
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h1>Expense Limits</h1>
+  </div>
+  
+  <div class="section">
+    <div class="section-heading">
+      <h2>Monthly Expense Limits</h2>
+    </div>
+    <form method="POST" action="{% url 'save_expense_limit' %}">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>Expense Category</th>
+          <th>Expense Limit</th>
+        </tr>
+        <tr>
+          <td>Rent/mortgage</td>
+          <td>
+            <input type="number" name="rent_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Electric</td>
+          <td>
+            <input type="number" name="electric_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Gas</td>
+          <td>
+            <input type="number" name="gas_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Cell phone</td>
+          <td>
+            <input type="number" name="cell_phone_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Groceries</td>
+          <td>
+            <input type="number" name="groceries_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Car payment</td>
+          <td>
+            <input type="number" name="car_payment_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Credit cards</td>
+          <td>
+            <input type="number" name="credit_cards_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Auto insurance</td>
+          <td>
+            <input type="number" name="auto_insurance_limit" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Miscellaneous</td>
+          <td>
+            <input type="number" name="miscellaneous_limit" required>
+          </td>
+        </tr>
+      </table>
+      <button type="submit">Save Limits</button>
+    </form>
+  </div>
+  
+      
+  
+  <div class="section">
+    <div class="section-heading">
+        <h2>Monthly Expenses</h2>
+    </div>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Amount</th>
+            <th>Expense Limit</th>
+        </tr>
+        <tr>
+            <td>Rent/mortgage</td>
+            <td>${{ expense_sums.rent_sum }}</td>
+            <td>${{ expense_limits.rent_limit }}</td>
+            {% if expense_sums.rent_sum > expense_limits.rent_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Electric</td>
+            <td>${{ expense_sums.electric_sum }}</td>
+            <td>${{ expense_limits.electric_limit }}</td>
+            {% if expense_sums.electric_sum > expense_limits.electric_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Gas</td>
+            <td>${{ expense_sums.gas_sum }}</td>
+            <td>${{ expense_limits.gas_limit }}</td>
+            {% if expense_sums.gas_sum > expense_limits.gas_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Cell phone</td>
+            <td>${{ expense_sums.cell_phone_sum }}</td>
+            <td>${{ expense_limits.cell_phone_limit }}</td>
+            {% if expense_sums.cell_phone_sum > expense_limits.cell_phone_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Groceries</td>
+            <td>${{ expense_sums.groceries_sum }}</td>
+            <td>${{ expense_limits.groceries_limit }}</td>
+            {% if expense_sums.groceries_sum > expense_limits.groceries_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Car payment</td>
+            <td>${{ expense_sums.car_payment_sum }}</td>
+            <td>${{ expense_limits.car_payment_limit }}</td>
+            {% if expense_sums.car_payment_sum > expense_limits.car_payment_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Credit cards</td>
+            <td>${{ expense_sums.credit_cards_sum }}</td>
+            <td>${{ expense_limits.credit_cards_limit }}</td>
+            {% if expense_sums.credit_cards_sum > expense_limits.credit_cards_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Auto insurance</td>
+            <td>${{ expense_sums.auto_insurance_sum }}</td>
+            <td>${{ expense_limits.auto_insurance_limit }}</td>
+            {% if expense_sums.auto_insurance_sum > expense_limits.auto_insurance_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Miscellaneous</td>
+            <td>${{ expense_sums.miscellaneous_sum }}</td>
+            <td>${{ expense_limits.miscellaneous_limit }}</td>
+            {% if expense_sums.miscellaneous_sum > expense_limits.miscellaneous_limit %}
+              <td class="exceeded-limit">Expenses Exceeded Limit</td>
+            {% else %}
+              <td class="within-limit">Within Limit</td>
+            {% endif %}
+        </tr>
+    </table>
+  </div>
+  
+  <div class="section">
+    <div class="section-heading">
+        <h2>Monthly Income</h2>
+    </div>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Amount</th>
+        </tr>
+        <tr>
+            <td>Income source 1</td>
+            <td>${{ income_sums.source_1_sum }}</td>
+        </tr>
+        <tr>
+            <td>Income source 2</td>
+            <td>${{ income_sums.source_2_sum }}</td>
+        </tr>
+        <tr>
+            <td>Other</td>
+            <td>${{ income_sums.other_sum }}</td>
+        </tr>
+    </table>
+  </div>
+  
+  <!-- Chart -->
+  <div class="section">
+    <h2>Summary Chart</h2>
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Retrieve the expense and income data from the server
+    var expensesData = [
+      {{ expense_sums.rent_sum }},
+      {{ expense_sums.electric_sum }},
+      {{ expense_sums.gas_sum }},
+      {{ expense_sums.cell_phone_sum }},
+      {{ expense_sums.groceries_sum }},
+      {{ expense_sums.car_payment_sum }},
+      {{ expense_sums.credit_cards_sum }},
+      {{ expense_sums.auto_insurance_sum }},
+      {{ expense_sums.miscellaneous_sum }}
+    ];
+
+    var incomeData = [
+      {{ income_sums.source_1_sum }},
+      {{ income_sums.source_2_sum }},
+      {{ income_sums.other_sum }}
+    ];
+
+    // Calculate total expenses and total income
+    var totalExpenses = expensesData.reduce((sum, expense) => sum + expense, 0);
+    var totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
+    
+    // Create the chart
+    var ctx = document.getElementById('chart').getContext('2d');
+    var chart = new Chart(ctx, {
+      type: 'bar', // Change chart type to bar
+      data: {
+        labels: ['Rent/mortgage', 'Electric', 'Gas', 'Cell phone', 'Groceries', 'Car payment', 'Credit cards', 'Auto insurance', 'Miscellaneous', 'Income source 1', 'Income source 2', 'Other'],
+        datasets: [{
+          data: expensesData.concat(incomeData),
+          backgroundColor: ['#FF6384', '#FF9F40', '#FFCD56', '#36A2EB', '#9966FF', '#FF6384', '#FFCE56', '#4BC0C0', '#FF9F40', '#36A2EB', '#9966FF', '#FFCE56']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+          display: false // Hide legend for bar chart
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false // Hide x-axis grid lines
+            }
+          },
+          y: {
+            beginAtZero: true // Start y-axis from zero
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                var label = context.label || '';
+
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed && context.parsed.y !== null) {
+                  label += '$' + context.parsed.y;
+                }
+
+                return label;
+              }
+            }
+          }
+        },
+        title: {
+          display: true,
+          text: 'Total Expenses: $' + totalExpenses + ' | Total Income: $' + totalIncome,
+          position: 'top',
+          fontColor: '#666',
+          fontSize: 18,
+          fontStyle: 'bold',
+          padding: 10
+        }
+      }
+    });
+  </script>
+</body>
+</html>

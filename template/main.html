@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Money Management</title>
+  
+  <style>
+    /* CSS styles for layout */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    h2 {
+      color: #666;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    
+    h3 {
+      color: #999;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    
+    p {
+      color: #333;
+      font-size: 16px;
+      margin: 0 0 10px 0;
+    }
+    
+    .section {
+      margin-bottom: 20px;
+    }
+    
+    .section-heading {
+      background-color: #f2f2f2;
+      padding: 10px;
+    }
+    
+    form {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    input[type="text"] {
+      width: 200px;
+      padding: 5px;
+    }
+    
+    input[type="submit"] {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .summary-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+    
+    .summary-link {
+      display: inline-block;
+      border-radius: 50%;
+      background-color: #4CAF50; /* Replace with your desired color */
+      color: white;
+      font-size: 24px;
+      padding: 30px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .summary-link:hover {
+      background-color: #45a049; /* Replace with your desired hover color */
+    }
+    
+    .details-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+    
+    .details-link {
+      display: inline-block;
+      border-radius: 50%;
+      background-color: #ff9800; /* Replace with your desired color */
+      color: white;
+      font-size: 24px;
+      padding: 30px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .details-link:hover {
+      background-color: #f57c00; /* Replace with your desired hover color */
+    }
+    .logout-button button {
+      width: 150px;
+      height: 50px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h1>Money Management</h1>
+  </div>
+  
+  <div class="section">
+    <div class="section-heading">
+        <h2>Monthly Expenses</h2>
+    </div>
+    <form action="{% url 'saveexpense' %}" method="post">
+        
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>Rent/mortgage</td>
+                <td>$<input type="number" name="rent" id="rent" required></td>
+            </tr>
+            <tr>
+                <td>Electric</td>
+                <td>$<input type="number" name="electric" id="electric" required></td>
+            </tr>
+            <tr>
+                <td>Gas</td>
+                <td>$<input type="number" name="gas" id="gas" required></td>
+            </tr>
+            <tr>
+                <td>Cell phone</td>
+                <td>$<input type="number" name="cell_phone" id="cell_phone" required></td>
+            </tr>
+            <tr>
+                <td>Groceries</td>
+                <td>$<input type="number" name="groceries" id="groceries" required></td>
+            </tr>
+            <tr>
+                <td>Car payment</td>
+                <td>$<input type="number" name="car_payment" id="car_payment" required></td>
+            </tr>
+            <tr>
+                <td>Credit cards</td>
+                <td>$<input type="number" name="credit_cards" id="credit_cards" required></td>
+            </tr>
+            <tr>
+                <td>Auto insurance</td>
+                <td>$<input type="number" name="auto_insurance" id="auto_insurance" required></td>
+            </tr>
+            <tr>
+                <td>Miscellaneous</td>
+                <td>$<input type="number" name="miscellaneous" id="miscellaneous" required></td>
+            </tr>
+            <!-- Rest of the expense items -->
+        </table>
+        <input type="submit" value="Submit Expenses">
+        {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+        {% endif %}
+    </form>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">
+        <h2>Monthly Income</h2>
+    </div>
+    <form action="{% url 'saveincome' %}" method="post">
+        
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Amount</th>
+            </tr>
+            <tr>
+                <td>Income source 1</td>
+                <td>$<input type="number" name="income_source_1" id="income_source_1" required></td>
+            </tr>
+            <tr>
+                <td>Income source 2</td>
+                <td>$<input type="number" name="income_source_2" id="income_source_2" required></td>
+            </tr>
+            <tr>
+                <td>Other</td>
+                <td>$<input type="number" name="other_income" id="other_income" required></td>
+            </tr>
+            <!-- Rest of the income items -->
+        </table>
+        <input type="submit" value="Submit Income">
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+    </form>
+  </div>
+
+
+  <div class="section">
+    <div class="section-heading">
+        <h2>Summary</h2>
+    </div>
+    <div class="summary-button">
+      <a href="{% url 'summary' %}" class="summary-link">View Summary</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-heading">
+        <h2>Current Month Details</h2>
+    </div>
+    <div class="details-button">
+      <a href="{% url 'current_month_details' %}" class="details-link">View Current Month Details</a>
+    </div>
+  </div>
+  
+  <div class="logout-button">
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+    </form>
+  </div>
+</body>
+</html>

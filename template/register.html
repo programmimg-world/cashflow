@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-image: url("https://img.freepik.com/photos-gratuite/cyberespace-numerique-particules-connexions-reseau-donnees-numeriques_24070-1303.jpg?size=626&ext=jpg");
+            background-size: cover;
+            background-position: center;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .testbox {
+            width: 400px;
+            margin: 50px auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px 0 #1b07fb;
+            background-color: rgba(226, 226, 255, 0.8);
+            padding: 40px;
+        }
+        .testbox h1 {
+            text-align: center;
+            color: black;
+            margin-bottom: 30px;
+        }
+        .testbox label {
+            display: block;
+            font-size: 14px;
+            color: #0000ff;
+            margin-bottom: 8px;
+        }
+        .testbox input[type="text"],
+        .testbox input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #0000ff;
+            border-radius: 3px;
+        }
+        .testbox p {
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .testbox p a {
+            text-decoration: none;
+            color: #0000ff;
+        }
+        .testbox .button {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            background: #0000ff;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+        .testbox .button:hover {
+            background: #000099;
+        }
+        .testbox .message {
+            font-size: 12px;
+            text-align: center;
+        }
+        .testbox .message a {
+            text-decoration: none;
+            color: #0000ff;
+        }
+        .testbox .message.success {
+            color: #0000ff;
+        }
+        .testbox .message.error {
+            color: #4b4141;
+        }
+        /* Customize form validation styles */
+        .testbox input:invalid {
+            border-color: #433b3b;
+        }
+        .testbox input:valid {
+            border-color: #00cc00;
+        }
+    </style>
+</head>
+<body>
+    <div class="testbox">
+        <h1>Registration</h1>
+        <form id="registration-form" action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" placeholder="Email" required/>
+            
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" placeholder="Name" required/>
+            
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" required/>
+            
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm Password" required/>
+            
+            <div id="otp-section">
+                <button type="button" id="send-otp-button" onclick="sendOTP()">Send OTP</button required>
+                <input type="text" name="eotp" id="otp" placeholder="Enter OTP sent via Email" style="display: none;" />
+            </div>
+
+            {% if error_message %}
+            <div class="error-message">{{ error_message }}</div>
+            {% endif %}
+            
+            <p>By clicking Register, you agree to our <a href="terms$condition">terms and conditions</a>.</p>
+            <p>Already a member? <a href="login">LOGIN HERE</a></p>
+            <button type="button" class="button" onclick="register()">Register</button>
+        </form>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function sendOTP() {
+            var email = document.getElementById("email").value;
+            
+            $.ajax({
+                url: "{% url 'send_otp_email' %}",
+                type: "POST",
+                data: {
+                    email: email,
+                    csrfmiddlewaretoken: "{{ csrf_token }}"
+                },
+                success: function(response) {
+                    var otpButton = document.getElementById("send-otp-button");
+                    var otpField = document.getElementById("otp");
+                    
+                    otpButton.style.display = "none";
+                    otpField.style.display = "block";
+                },
+                error: function(xhr, errmsg, err) {
+                    // Handle error if necessary
+                }
+            });
+        }
+        
+        function register() {
+            document.getElementById("registration-form").submit();
+        }
+    </script>
+</body>
+</html>

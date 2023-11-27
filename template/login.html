@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600" rel="stylesheet" type="text/css">
+    
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-image: url("https://img.freepik.com/photos-gratuite/cyberespace-numerique-particules-connexions-reseau-donnees-numeriques_24070-1303.jpg?size=626&ext=jpg");
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+        .login-box {
+            width: 400px;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px 0 rgba(27, 7, 251, 0.5);
+            background-color: rgba(226, 226, 255, 0.9);
+            padding: 30px;
+        }
+        
+        .login-box h1 {
+            text-align: center;
+            color: black;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .login-box input[type="text"],
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #0000ff;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .login-box input[type="text"]:focus,
+        .login-box input[type="password"]:focus {
+            border-color: #000099;
+        }
+        
+        .login-box .button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: #0000ff;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 14px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .login-box .button:hover {
+            background: #000099;
+        }
+        
+        .login-box form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .login-box input,
+        .login-box button {
+            margin-bottom: 10px;
+        }
+        
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        /* Additional CSS for checkbox positioning */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .custom-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            margin-right: 10px;
+        }
+        
+        .custom-checkbox label {
+            margin: 0;
+            margin-left: 5px;
+            font-size: 14px;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>Login</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="text" name="gmail" placeholder="Email" required>
+            
+            <input type="password" name="pass" placeholder="Password" required>
+            
+            <div class="custom-checkbox">
+                <input type="checkbox" id="robot-checkbox" name="robot-checkbox" value="checked">
+                <label for="robot-checkbox">I'm not a robot</label>
+            </div>
+            
+            {% if error_message %}
+            <div class="error-message">{{ error_message }}</div>
+            {% endif %}
+            
+            <button type="submit" class="button">Login</button>
+        </form>
+    </div>
+</body>
+</html>
